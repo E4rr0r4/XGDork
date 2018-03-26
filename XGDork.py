@@ -6,40 +6,60 @@ import sys
 import requests
 from random import randint
 from termcolor import colored
-from XGDlib import search_engine
+from XGDlib import search_engine, bypass_GST
 
 
 argc = len(sys.argv)
-if (argc == 2):
-    if (sys.argv[1] == '-h' or sys.argv[1] == '--help'):
-        print (" USE : XGDork.py -d 'your dork' -p 'pages_number' -o 'out_file' ")
+iargs = 1
+
+data_dork = ""
+data_page = -1
+data_file = ""
+data_bypass = -1
+
+while (iargs < argc):
+
+    if (argc < 2):
+        print ("Params Error, please use XGDork.py --help ! \n")
         exit()
-elif (argc == 7):
 
-    p_dork = sys.argv[1]
-    data_dork = sys.argv[2]
-    p_page = sys.argv[3]
-    data_page = sys.argv[4]
-    p_file = sys.argv[5]
-    data_file = sys.argv[6]
+    if ((sys.argv[iargs] == '-h' or sys.argv[iargs] == '--help') and argc == 2):
+        print ("\n USE : XGDork.py -d 'your_dork' -p 'page_number' -o 'out_file' \n")
+        print (" -d 'your_dork'  add your dork")
+        print (" -p 'page_number'  add pages number")
+        print (" -o 'out_file'  save result")
+        print (" -b '[1-4]'  active bypass mode\n")
+        exit()
 
-    if (p_dork == '-d' and p_page == '-p' and p_file == '-o' and data_dork != '' and data_page != '' and data_file != ''):
-            
+    if (sys.argv[iargs] == '-d'):
+        data_dork = sys.argv[iargs+1]
+    if (sys.argv[iargs] == '-p'):
+        data_page = int(sys.argv[iargs+1])
+    if (sys.argv[iargs] == '-o'):
+        data_file = sys.argv[iargs+1]
+    if (sys.argv[iargs] == '-b'):
+        data_bypass = int(sys.argv[iargs+1])
+
+    iargs += 1
+
+
+if (data_dork != '' and data_page > 0 and data_file != ''):
+
         print ("\n\n")
         print colored("  __  ______ ____             _     ", 'blue')
         print colored("  \ \/ / ___|  _ \  ___  _ __| | __ ", 'blue')
         print colored("   \  / |  _| | | |/ _ \| '__| |/ / ", 'blue')
         print colored("   /  \ |_| | |_| | (_) | |  |   <  ", 'blue')
         print colored("  /_/\_\____|____/ \___/|_|  |_|\_\ \n", 'blue')
-        print colored("XGDork - ViraX Google Dork Scanner", 'grey')
+        print colored(" --- ViraX Google Dork Scanner --- ", 'grey')
         print colored("Original code by ViraX")
 
-        print colored("Version: a0.7.5 for Python 2.7")
+        print colored("Version: a1.0.3 for Python 2.7")
         print colored("Contributor(s)")
         print colored("- ")
         print ("\n")
 
-        print colored(" [!] DISCLAIMER: This program makes it easy to find vulnerable SQL injection URLs, it is only a prototype, it is very simple, it will be improved ... I am not responsible for illegal acts that you would do with this program !, only educational . [!] \n", 'green')
+        print colored(" [!] DISCLAIMER: This program makes it easy to find vulnerable SQL injection URLs, it's a very simple program (naive), it will be improved ... I am not responsible for illegal acts that you would do with this program !, only educational . [!] \n", 'green')
         print ("it will be improved, wait ...")
 
         print colored("\n [!] XGDork Start ... [!] \n", 'blue')
@@ -47,11 +67,19 @@ elif (argc == 7):
         nfile = open(data_file, 'w')
         nfile.write("--- XGDork Result --- \n")
         nfile.close()
+        
+        if (data_bypass > 0):
+            print colored(" [*] Warning: Bypass mode is active, the search will be much less precise, the search time increase, max number of pages reduced to 5, may have altered your search !", 'red')
+            print colored(" [!] it may not work ! ", 'red')
+            if (data_page > 5):
+                data_page = 5
+                print colored(" [!] Page_number: "+str(data_page), 'red')
+            print colored(" [!] TimeLoop += \n", 'red')
+            data_dork = bypass_GST (data_dork, data_bypass)
 
-        search_engine (data_dork, int(data_page), data_file)
+        search_engine (data_dork, data_page, data_file, data_bypass)
         exit(1)
-    else:
-        print ("! Error Params ! USE: XGDork.py -h [OR] --help !")
+
 else:
     print ("! USE : XGDork.py -h [OR] --help !")
     exit()
