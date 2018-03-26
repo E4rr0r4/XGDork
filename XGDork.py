@@ -51,7 +51,7 @@ if (data_dork != '' and data_page > 0 and data_file != ''):
         print colored("   \  / |  _| | | |/ _ \| '__| |/ / ", 'blue')
         print colored("   /  \ |_| | |_| | (_) | |  |   <  ", 'blue')
         print colored("  /_/\_\____|____/ \___/|_|  |_|\_\ \n", 'blue')
-        print colored(" --- ViraX Google Dork Scanner --- ", 'grey')
+        print colored(" --- ViraX Google Dork Scanner --- ", 'cyan')
         print colored("Original code by ViraX")
 
         print colored("Version: a1.0.3 for Python 2.7")

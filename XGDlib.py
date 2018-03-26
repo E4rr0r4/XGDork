@@ -297,10 +297,10 @@ def     myParserSQLE (url):
                 return lvl
         except requests.exceptions.ConnectionError:
             #wb_req.status_code = "Connection refused"
-            print colored(" [-] Request Error, ignored ... ", 'grey')
+            print colored(" [-] Request Error, ignored ... ", 'red')
         except requests.quests.exceptions.TooManyRedirects:
             #wb_req.status_code = "Connection refused"
-            print colored(" [-] Request Error, ignored ... ", 'grey')
+            print colored(" [-] Request Error, ignored ... ", 'red')
     
 
 
