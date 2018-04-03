@@ -401,8 +401,9 @@ def     search_engine (dork, n_page, out_file, bp, cdom):
                 if (n_page > 5):
                     n_page = 5
                     print colored(" [!] Page_number = 5", 'red')
-       
-        cdom = cdom.replace('.', '')
+
+        if (cdom[0] == '.'):       
+            cdom = block_cutter(cdom, 1, len(cdom)-1)
 
         print colored(" [*] GSE Crawling wait ...\n", 'cyan')
         while (i <= n_page):
