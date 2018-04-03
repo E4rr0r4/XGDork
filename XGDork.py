@@ -6,7 +6,7 @@ import sys
 import requests
 from random import randint
 from termcolor import colored
-from XGDlib import search_engine, bypass_GST
+from XGDlib import search_engine, bypass_GST, dump_page
 
 
 argc = len(sys.argv)
@@ -16,6 +16,7 @@ data_dork = ""
 data_page = -1
 data_file = ""
 data_bypass = -1
+data_cdom = ""
 
 while (iargs < argc):
 
@@ -25,16 +26,20 @@ while (iargs < argc):
 
     if ((sys.argv[iargs] == '-h' or sys.argv[iargs] == '--help') and argc == 2):
         print ("\n USE : XGDork.py -d 'your_dork' -p 'page_number' -o 'out_file' \n")
-        print (" -d 'your_dork'  add your dork")
-        print (" -p 'page_number'  add pages number")
-        print (" -o 'out_file'  save result")
-        print (" -b '[1-4]'  active bypass mode\n")
+        print (" -d 'your_dork'  :add your dork")
+        print (" -cd 'your_custom_domain'  :add custom domain (e,g .com)")
+        print (" -p 'page_number'  :add pages number")
+        print (" -p 'range(n1,n2)' OR 'n1,n2'  :add pages number with range")
+        print (" -o 'out_file'  :save result")
+        print (" -b '[1-4]'  :active bypass mode, rand(domain) actived\n")
         exit()
 
     if (sys.argv[iargs] == '-d'):
         data_dork = sys.argv[iargs+1]
     if (sys.argv[iargs] == '-p'):
-        data_page = int(sys.argv[iargs+1])
+        data_page = sys.argv[iargs+1]
+    if (sys.argv[iargs] == '-cd'):
+        data_cdom = sys.argv[iargs+1]
     if (sys.argv[iargs] == '-o'):
         data_file = sys.argv[iargs+1]
     if (sys.argv[iargs] == '-b'):
@@ -54,7 +59,7 @@ if (data_dork != '' and data_page > 0 and data_file != ''):
         print colored(" --- ViraX Google Dork Scanner --- ", 'cyan')
         print colored("Original code by ViraX")
 
-        print colored("Version: a1.0.3 for Python 2.7")
+        print colored("Version: a1.0.7 for Python 2.7")
         print colored("Contributor(s)")
         print colored("- ")
         print ("\n")
@@ -71,13 +76,11 @@ if (data_dork != '' and data_page > 0 and data_file != ''):
         if (data_bypass > 0):
             print colored(" [*] Warning: Bypass mode is active, the search will be much less precise, the search time increase, max number of pages reduced to 5, may have altered your search !", 'red')
             print colored(" [!] it may not work ! ", 'red')
-            if (data_page > 5):
-                data_page = 5
-                print colored(" [!] Page_number: "+str(data_page), 'red')
+
             print colored(" [!] TimeLoop += \n", 'red')
             data_dork = bypass_GST (data_dork, data_bypass)
 
-        search_engine (data_dork, data_page, data_file, data_bypass)
+        search_engine (data_dork, data_page, data_file, data_bypass, data_cdom)
         exit(1)
 
 else:

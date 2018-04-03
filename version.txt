@@ -1,0 +1,40 @@
+
+ --- XGDork ---
+
+ version : a1.0.7
+ alpha-open
+
+ --- ------ ---
+
+
+ --- UPDATES ---
+
+[a1.0.7]
+  - Improved Bypass> added a 'rand_domain', integrate.
+  - SearchEngine enhancement> 'customdomain' option allows you to manually define a Google domain, by default: '. Com'
+  - SearchEngine enhancement> option 'range ()' sets the start and end of search
+  - Various Improvement / Modification ...
+  - Optimization of the code in general ...
+
+[a.1.0.3]
+  - Supports Rewritten Arguments (flexible, easy to add new module or options ...)
+  - Add Bypass mode (simple)
+  - Code slightly optimize
+
+[a.0.8.0 (dev)]
+  - Add Bypass mode (primitive)
+  - Improved SQL Parser
+  - Quote change from "'" to "%% 2727"
+  - Improved SearchEngine and Parser
+  - Improved URLs filter
+
+[a0.7.5]
+  - First version share
+  - Rewriting code
+  - Improvement at all
+
+[Prototype (dev)]
+  - basic functions, primitive ...
+
+
+

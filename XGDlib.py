@@ -19,6 +19,26 @@ def     block_cutter (string, int_start, int_end):
         return newd
 
 
+def     dump_page(string):
+        dump = []
+        string = string.replace("range(", '')
+        string = string.replace(')', '')
+        dump = string.split(',')
+    
+        return dump
+
+
+
+def     rand_domain ():
+        
+        rnd_n = randint(0,17)
+
+        domain_file = open('domain.txt', 'r')
+        domain_use = str(domain_file.readlines()[rnd_n])
+        domain_use = domain_use.replace('\n', '')
+        return domain_use
+
+
 
 def     rand_agent ():
 
@@ -103,10 +123,10 @@ def     bypass_GST (dork, mod):
 
         if (mod == 4):
             dork = dork.replace(' ', '  ')
-            dork = dork.replace('inurl:', '%+%inurl+:%+%')
-            dork = dork.replace('intext:', '%+%intext+:%+%')
-            dork = dork.replace('site:', '%+%site+:%+%')
-            dork = dork.replace('intitle:', '%+%intitle+:%+%')
+            dork = dork.replace('inurl:', '%20inurl%20:')
+            dork = dork.replace('intext:', '%20intext%20:')
+            dork = dork.replace('site:', '%20site%20:')
+            dork = dork.replace('intitle:', '%20intitle%20:')
 
         return dork
 
@@ -153,34 +173,36 @@ def     myParserGSE (greq):
                         url_found = block_cutter (url_found, 0, url_found.find('...')-1)
                     if (url_found.find('&L=') > -1):
                         url_found = block_cutter(url_found, 0, url_found.find('&L=')-1)
+                    if (url_found.find('</span></div></div><div') > -1):
+                        url_found = block_cutter(url_found, 0, url_found.find('</span></div></div><div')-2)
 
-                    if (url_found.find('<b>') > -1):
-                        url_found = url_found.replace('<b>', '')
-                    if (url_found.find('</b>') > -1):
-                        url_found = url_found.replace('</b>', '')
-                    if (url_found.find('"') > -1):
-                        url_found = url_found.replace('"', '')
-                    if (url_found.find('<br>') > -1):
-                        url_found = url_found.replace('<br>', '')
-                    if (url_found.find('</br>') > -1):
-                        url_found = url_found.replace('</br>', '')
+                    #if (url_found.find('<b>') > -1):
+                    url_found = url_found.replace('<b>', '')
+                    #if (url_found.find('</b>') > -1):
+                    url_found = url_found.replace('</b>', '')
+                    #if (url_found.find('"') > -1):
+                    url_found = url_found.replace('"', '')
+                    #if (url_found.find('<br>') > -1):
+                    url_found = url_found.replace('<br>', '')
+                    #if (url_found.find('</br>') > -1):
+                    url_found = url_found.replace('</br>', '')
                     
                     
-                    if (url_found.find('%253F') > -1):
-                        url_found = url_found.replace('%253F', '')
-                    if (url_found.find('%3F') > -1):
-                        url_found = url_found.replace('%3F', '?')
-                    if (url_found.find('%253D') > -1):
-                        url_found = url_found.replace('%253D', '=')
-                    if (url_found.find('%2526') > -1):
-                        url_found = url_found.replace('%2526', '&')
-                    if (url_found.find('%3D') > -1):
-                        url_found = url_found.replace('%3D', '=')
-                    if (url_found.find('%26') > -1):
-                        url_found = url_found.replace('%26', '&')
+                    #if (url_found.find('%253F') > -1):
+                    url_found = url_found.replace('%253F', '')
+                    #if (url_found.find('%3F') > -1):
+                    url_found = url_found.replace('%3F', '?')
+                    #if (url_found.find('%253D') > -1):
+                    url_found = url_found.replace('%253D', '=')
+                    #if (url_found.find('%2526') > -1):
+                    url_found = url_found.replace('%2526', '&')
+                    #if (url_found.find('%3D') > -1):
+                    url_found = url_found.replace('%3D', '=')
+                    #if (url_found.find('%26') > -1):
+                    url_found = url_found.replace('%26', '&')
 
 
-                    if (url_found.find('.google.') == -1 and url_found.find('.gstatic.') == -1 and url_found.find('injection-sql') == -1 and url_found.find('sql-injection') == -1 and url_found.find('sql-injections') == -1 and url_found.find('sql-dorks') == -1 and url_found.find('dorks') == -1 and url_found.find('hack') == -1 and url_found.find('scribd') == -1 and url_found.find('pastebin') == -1 and url_found.find('stackoverflow') == -1 and url_found.find('over-blog') == -1 and url_found.find('github') == -1 and url_found.find('blogspot') == -1 and url_found.find('facebook') == -1):
+                    if (url_found.find('.google.') == -1 and url_found.find('.gstatic.') == -1 and url_found.find('injection-sql') == -1 and url_found.find('sql-injection') == -1 and url_found.find('sql-injections') == -1 and url_found.find('sql-dorks') == -1 and url_found.find('dorks') == -1 and url_found.find('hack') == -1 and url_found.find('scribd') == -1 and url_found.find('pastebin') == -1 and url_found.find('stackoverflow') == -1 and url_found.find('over-blog') == -1 and url_found.find('github') == -1 and url_found.find('blogspot') == -1 and url_found.find('facebook') == -1 and url_found.find('moodle.') == -1 and url_found.find('openclassroom') == -1):
                         urls.append(url_found)
                         print (" [!] URL Found: "+url_found)
                     
@@ -202,9 +224,9 @@ def     myParserSQLE (url):
             data = wb_req.text.encode('utf-8')
             #SFind
             if (data.find('MySQL') > -1):
-                lvl += 2
+                lvl += 1
             if (data.find('SQL') > -1):
-                lvl += 2
+                lvl += 1
             if (data.find('SQL syntax') > -1):
                 lvl += 2
             if (data.find('Warning:') > -1):
@@ -297,10 +319,10 @@ def     myParserSQLE (url):
                 return lvl
         except requests.exceptions.ConnectionError:
             #wb_req.status_code = "Connection refused"
-            print colored(" [-] Request Error, ignored ... ", 'red')
+            print colored(" [-] Request Error, ignored ... ", 'grey')
         except requests.quests.exceptions.TooManyRedirects:
             #wb_req.status_code = "Connection refused"
-            print colored(" [-] Request Error, ignored ... ", 'red')
+            print colored(" [-] Request Error, ignored ... ", 'grey')
     
 
 
@@ -336,7 +358,7 @@ def     moulinette (urls, out_file):
 
 
 
-def     search_engine (dork, n_page, out_file, bp):
+def     search_engine (dork, n_page, out_file, bp, cdom):
 
         
         IP_PO = ipuser()
@@ -344,18 +366,58 @@ def     search_engine (dork, n_page, out_file, bp):
 
         su_filter = ""
         urls_found = []
-        i = 1
-        
+        pvalue = 0
+        i = 0
+
+        if (len(dump_page(n_page)) > 1):
+            pvalue = str(dump_page(n_page)[0])
+            pvalue = pvalue.replace("'", '')
+            pvalue = pvalue.replace('[', '')
+            pvalue = pvalue.replace(']', '')
+            i = int(pvalue)
+            if (i <= 0):
+                i = 1
+
+            pvalue = str(dump_page(n_page)[1])
+            pvalue = pvalue.replace("'", '')
+            pvalue = pvalue.replace('[', '')
+            pvalue = pvalue.replace(']', '')
+            n_page = int(pvalue)
+
+            if (bp > 0):
+                if ((n_page-i) > 5):
+                    n_page = n_page-((n_page-i)-6)
+                    print colored(" [!] Page_number = 5", 'red')
+
+        else:
+            pvalue = str(dump_page(n_page))
+            pvalue = pvalue.replace("'", '')
+            pvalue = pvalue.replace('[', '')
+            pvalue = pvalue.replace(']', '')
+            i = 1
+            n_page = int(pvalue)
+
+            if (bp > 0):
+                if (n_page > 5):
+                    n_page = 5
+                    print colored(" [!] Page_number = 5", 'red')
+       
+        cdom = cdom.replace('.', '')
+
         print colored(" [*] GSE Crawling wait ...\n", 'cyan')
         while (i <= n_page):
 
             g_page = str(i*10)
-
+            
             user_agent = rand_agent()
             headers = {'User-Agent': user_agent}
+
             print colored("\n\n [+] User-Agent: "+user_agent, 'green')
-            
+
             if (bp > 0):
+
+                domain = rand_domain()
+                print colored(" [+] Domain: "+domain, 'green')
 
                 Client = rand_client()
                 print colored(" [+] Client: "+Client, 'green')
@@ -364,13 +426,16 @@ def     search_engine (dork, n_page, out_file, bp):
                 print colored(" [+] GS_L: "+GS_L+"\n\n", 'green')
                 
                 time.sleep(randint(5, 10))
-                nurl = "http://www.google.ru/search?q="+dork+"&start="+g_page+"&"+Client+"&"+GS_L
+                nurl = "http://www.google."+domain+"/search?q="+dork+"&start="+g_page+"&"+Client+"&"+GS_L
             
             else:
                 time.sleep(randint(2, 5))
-                nurl = "http://www.google.ru/search?q="+dork+"&start="+g_page
+                if (cdom != ''):
+                    print colored(" [+] Domain: "+cdom, 'green')
+                    nurl = "http://www.google."+cdom+"/search?q="+dork+"&start="+g_page
+                else:
+                    nurl = "http://www.google.com/search?q="+dork+"&start="+g_page
             
-        
             greq = requests.get(nurl, headers=headers)
             gdata = greq.text.encode('utf-8')
 
