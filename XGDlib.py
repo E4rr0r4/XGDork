@@ -173,8 +173,12 @@ def     myParserGSE (greq):
                         url_found = block_cutter (url_found, 0, url_found.find('...')-1)
                     if (url_found.find('&L=') > -1):
                         url_found = block_cutter(url_found, 0, url_found.find('&L=')-1)
-                    if (url_found.find('</span></div></div><div') > -1):
-                        url_found = block_cutter(url_found, 0, url_found.find('</span></div></div><div')-2)
+                    if (url_found.find('#') > -1):
+                        url_found = block_cutter(url_found, 0, url_found.find('#')-1)
+                    if (url_found.find('.</') > -1):
+                        url_found = block_cutter(url_found, 0, url_found.find('.</')-1)
+                    if (url_found.find('.</span></div></div><div') > -1):
+                        url_found = block_cutter(url_found, 0, url_found.find('.</span></div></div><div')-1)
 
                     #if (url_found.find('<b>') > -1):
                     url_found = url_found.replace('<b>', '')
@@ -203,7 +207,9 @@ def     myParserGSE (greq):
 
 
                     if (url_found.find('.google.') == -1 and url_found.find('.gstatic.') == -1 and url_found.find('injection-sql') == -1 and url_found.find('sql-injection') == -1 and url_found.find('sql-injections') == -1 and url_found.find('sql-dorks') == -1 and url_found.find('dorks') == -1 and url_found.find('hack') == -1 and url_found.find('scribd') == -1 and url_found.find('pastebin') == -1 and url_found.find('stackoverflow') == -1 and url_found.find('over-blog') == -1 and url_found.find('github') == -1 and url_found.find('blogspot') == -1 and url_found.find('facebook') == -1 and url_found.find('moodle.') == -1 and url_found.find('openclassroom') == -1):
-                        urls.append(url_found)
+                        if (url_found.find('=') > -1 and url_found.find('?') > -1):
+                            urls.append(url_found)
+
                         print (" [!] URL Found: "+url_found)
                     
             i += 1
@@ -259,26 +265,10 @@ def     myParserSQLE (url):
                 lvl += 3
             if (data.find('Warning: require(): ') > -1):
                 lvl += 3
-            if (data.find('MySQL Error: 1064') > -1):
-                lvl += 4
-            if (data.find('SQL Error: 1064') > -1):
-                lvl += 4
-            if (data.find('SQL Error : 1054 Unknown column') > -1):
-                lvl += 4
-            if (data.find('SQL Error: 1146') > -1):
-                lvl += 4
-            if (data.find('SQL Error: 2006') >- 1):
-                lvl += 4
-            if (data.find('SQL Error: 1406') > -1):
-                lvl += 4
-            if (data.find('SQL Error: 1030') > -1):
-                lvl += 4
-            if (data.find('SQL Error: 1034') > -1):
-                lvl += 4
-            if (data.find('SQL Error: 1690') > -1):
-                lvl += 4
-            if (data.find('SQL Error:') > -1):
-                lvl += 1
+            if (data.find('MySQL Error: ') > -1):
+                lvl += 3
+            if (data.find('SQL Error: ') > -1):
+                lvl += 3
             if (data.find('Unable to jump to row') > -1):
                 lvl += 1
             if (data.find('Session halted.') > -1):
@@ -319,10 +309,12 @@ def     myParserSQLE (url):
                 return lvl
         except requests.exceptions.ConnectionError:
             #wb_req.status_code = "Connection refused"
-            print colored(" [-] Request Error, ignored ... ", 'grey')
+            print colored(" [-] Request Error, ignored ... ", 'cyan')
+            ##b_req.status_code = "Connection refused"
         except requests.quests.exceptions.TooManyRedirects:
             #wb_req.status_code = "Connection refused"
-            print colored(" [-] Request Error, ignored ... ", 'grey')
+            print colored(" [-] Request Error, ignored ... ", 'cyan')
+            #wb_req.status_code = "Connection refused"
     
 
 
@@ -386,7 +378,7 @@ def     search_engine (dork, n_page, out_file, bp, cdom):
 
             if (bp > 0):
                 if ((n_page-i) > 5):
-                    n_page = n_page-((n_page-i)-6)
+                    n_page = (n_page-(n_page-4))
                     print colored(" [!] Page_number = 5", 'red')
 
         else:
