@@ -1,13 +1,26 @@
 
  --- XGDork ---
 
- version : a1.0.7
- alpha-open
+ version : b0.6.0
+ beta-open
 
  --- ------ ---
 
 
  --- UPDATES ---
+
+[b0.6.0]
+  - Parsers improve
+  - Fix range () option in bypass mode
+  - Addition of the 'Dumper' module, 'naif', MySQL >= 5 Generic.
+
+[b0.5.0 (dev)]
+   - Dumper rewrite
+   - Dumper enhancement> Syntax change during the attack if needed.
+
+[b0.3.0 (dev)]
+  - Adding a Module 'Dumper'> tries to inject automatically, via 'a simple SQL attack' if the result is positive then allows 'dump' the database (MySQL> = 5) of the site in question. .
+  - Simple attack "Error-Based 'Unknown WHERE CLAUSE'"
 
 [a1.0.7]
   - Improved Bypass> added a 'rand_domain', integrate.
