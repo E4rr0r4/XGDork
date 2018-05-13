@@ -7,6 +7,10 @@ Simple 'naive' program that automates URL search, vulnerable to SQL injection, f
 [!] DISCLAIMER: I am not responsible for illegal acts that you would do with this program !, only educational . [!]
 
 --- Setup ---
+- install Python 2.7
 - pip2 install requests
 - pip2 install termcolor
+- git clone
+- cd XGDork
+- chmod (optional)
 - python2 XGDork.py --help

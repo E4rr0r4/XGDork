@@ -29,17 +29,6 @@ def     dump_page(string):
 
 
 
-def     rand_domain ():
-        
-        rnd_n = randint(0,17)
-
-        domain_file = open('domain.txt', 'r')
-        domain_use = str(domain_file.readlines()[rnd_n])
-        domain_use = domain_use.replace('\n', '')
-        return domain_use
-
-
-
 def     rand_agent ():
 
         rnd_n = randint(5, 4200)
@@ -50,28 +39,6 @@ def     rand_agent ():
         user_agent = user_agent.replace('\n', '')
         return user_agent
 
-
-def     rand_client ():
-
-        rnd_n = randint(0, 10)
-
-        client_file = open('clients.txt', 'r')
-        client_name = str(client_file.readlines()[rnd_n])
-        client_file.close()
-        client_name = client_name.replace('\n', '')
-        return client_name
-
-
-def     rand_gsl ():
-
-        rnd_n = randint(0, 3)
-
-        gsl_file = open('gs_l.txt', 'r')
-        gsl_client = str(gsl_file.readlines()[rnd_n])
-        gsl_file.close()
-        gsl_client = gsl_client.replace('&', '')
-        gsl_client = gsl_client.replace('\n', '')
-        return gsl_client
 
 
 def     ipuser ():
@@ -99,46 +66,14 @@ def     ipuser ():
 
 
 
-def     bypass_GST (dork, mod):
-        
-        
-        if (mod == 1):
-            dork = dork.replace('inurl:', 'inurl+:')
-            dork = dork.replace('intext:', 'intext+:')
-            dork = dork.replace('site:', 'site+:')
-            dork = dork.replace('intitle:', 'intitle+:')
 
-        if (mod == 2):
-            dork = dork.replace('inurl:', 'inur+l:')
-            dork = dork.replace('site:', 'sit+e:')
-            dork = dork.replace('intext:', 'intex+t:')
-            dork = dork.replace('intitle', 'intitl+e:')
-
-        if (mod == 3):
-            dork = dork.replace(' ', '   ')
-            dork = dork.replace('inurl:', 'i+ n+ u+ r+ l+:')
-            dork = dork.replace('intext:', 'i+ n+ t+ e+ x+ t+:')
-            dork = dork.replace('intitle:', 'i+ n+ t+ i+ t+ l+ e+:')
-            dork = dork.replace('site:', 's+ i+ t+ e+:')
-
-        if (mod == 4):
-            dork = dork.replace(' ', '  ')
-            dork = dork.replace('inurl:', '%20inurl%20:')
-            dork = dork.replace('intext:', '%20intext%20:')
-            dork = dork.replace('site:', '%20site%20:')
-            dork = dork.replace('intitle:', '%20intitle%20:')
-
-        return dork
-
-
-
-
-def     myParserGSE (greq):
+def     myParserGSE (greq, bp):
 
         i = 0 
         ca = 0
         cb = 0
         urls = []
+        nurls = []
 
         if (greq.find("<b>About this page</b><br><br>Our systems have detected unusual traffic from your computer network.") > -1):
             print colored(" [!] Google Security Traffic page detected ! < Unusual Traffic >", 'red')
@@ -153,12 +88,18 @@ def     myParserGSE (greq):
                     i += 1
                 cb = i
                 tmp = block_cutter (greq, ca, cb)
-                if (tmp == 'http:' or tmp == 'https:'):
+            
+                if (tmp == 'http:' or tmp == 'https:' or (tmp == "h3 class='clk'><a href='http:" and bp > 0) or (tmp == "h3 class='clk'><a href='https:" and bp > 0) or (tmp == "href='http:" and bp > 0) or (tmp == "href='https:" and bp > 0)):
+
                     while (i < len(greq)-1 and greq[i] != ' '):
                         i += 1
                     cb = i
-                    url_found = block_cutter (greq, ca, cb)
+                    if (bp > 0):
+                        url_found = block_cutter (greq, (ca+len("h3 class='clk'><a href='")), cb-2)
+                    else:
+                        url_found = block_cutter (greq, ca, cb)
                     
+
                     if (url_found.find('%252B') > -1):
                         url_found = block_cutter (url_found, 0, url_found.find('%252B')-1)
                     if (url_found.find('</cite>') > -1):
@@ -206,16 +147,17 @@ def     myParserGSE (greq):
                     url_found = url_found.replace('%26', '&')
 
 
-                    if (url_found.find('.google.') == -1 and url_found.find('.gstatic.') == -1 and url_found.find('injection-sql') == -1 and url_found.find('sql-injection') == -1 and url_found.find('sql-injections') == -1 and url_found.find('sql-dorks') == -1 and url_found.find('dorks') == -1 and url_found.find('hack') == -1 and url_found.find('scribd') == -1 and url_found.find('pastebin') == -1 and url_found.find('stackoverflow') == -1 and url_found.find('over-blog') == -1 and url_found.find('github') == -1 and url_found.find('blogspot') == -1 and url_found.find('facebook') == -1 and url_found.find('moodle.') == -1 and url_found.find('openclassroom') == -1):
-                        if (url_found.find('=') > -1 and url_found.find('?') > -1):
+                    if (url_found.find('.google.') == -1 and url_found.find('.gstatic.') == -1 and url_found.find('injection-sql') == -1 and url_found.find('sql-injection') == -1 and url_found.find('sql-injections') == -1 and url_found.find('sql-dorks') == -1 and url_found.find('dorks') == -1 and url_found.find('hack') == -1 and url_found.find('scribd') == -1 and url_found.find('pastebin') == -1 and url_found.find('stackoverflow') == -1 and url_found.find('over-blog') == -1 and url_found.find('github') == -1 and url_found.find('blogspot') == -1 and url_found.find('facebook') == -1 and url_found.find('moodle.') == -1 and url_found.find('openclassroom') == -1 and url_found.find('cracking.org') == -1 and url_found.find('websec.ca') == -1 and url_found.find('sql_injection') == -1 and url_found.find('injection_sql') == -1 and url_found.find('carding_dork') == -1 and url_found.find('carding-dork') == -1 and url_found.find('hacking') == -1 and url_found.find('vulnerability-lab.com') == -1):
+                        if ((url_found.find('http:') > -1 or url_found.find('https:') > -1) and url_found.find('=') > -1 and url_found.find('?') > -1 and url_found.find('ixquick-proxy.com') == -1):
                             urls.append(url_found)
-
-                        print (" [!] URL Found: "+url_found)
+                            print (" [!] URL Found: "+url_found)
+                    #else:
+                        #print (" [*] URL Ignored: "+url_found)
                     
             i += 1
 
-        urls = list(set(urls))
-        return urls
+        nurls = list(set(urls))
+        return nurls
         
 
 def     myParserSQLE (url):
@@ -311,7 +253,7 @@ def     myParserSQLE (url):
             #wb_req.status_code = "Connection refused"
             print colored(" [-] Request Error, ignored ... ", 'cyan')
             ##b_req.status_code = "Connection refused"
-        except requests.quests.exceptions.TooManyRedirects:
+        except requests.exceptions.TooManyRedirects:
             #wb_req.status_code = "Connection refused"
             print colored(" [-] Request Error, ignored ... ", 'cyan')
             #wb_req.status_code = "Connection refused"
@@ -352,7 +294,6 @@ def     moulinette (urls, out_file):
 
 def     search_engine (dork, n_page, out_file, bp, cdom):
 
-        
         IP_PO = ipuser()
         print colored(" [*] Public IP overview: "+IP_PO, 'blue')
 
@@ -360,6 +301,8 @@ def     search_engine (dork, n_page, out_file, bp, cdom):
         urls_found = []
         pvalue = 0
         i = 0
+        ca = 0
+        cb = 0
 
         if (len(dump_page(n_page)) > 1):
             pvalue = str(dump_page(n_page)[0])
@@ -376,67 +319,73 @@ def     search_engine (dork, n_page, out_file, bp, cdom):
             pvalue = pvalue.replace(']', '')
             n_page = int(pvalue)
 
-            if (bp > 0):
-                if ((n_page-i) > 5):
-                    n_page = (n_page-(n_page-4))
-                    print colored(" [!] Page_number = 5", 'red')
-
         else:
             pvalue = str(dump_page(n_page))
             pvalue = pvalue.replace("'", '')
             pvalue = pvalue.replace('[', '')
             pvalue = pvalue.replace(']', '')
-            i = 1
+            i = 0
             n_page = int(pvalue)
-
-            if (bp > 0):
-                if (n_page > 5):
-                    n_page = 5
-                    print colored(" [!] Page_number = 5", 'red')
         
         if (len(cdom) > 0):
             if (cdom[0] == '.'):       
                 cdom = block_cutter(cdom, 1, len(cdom)-1)
 
         print colored(" [*] GSE Crawling wait ...\n", 'cyan')
-        while (i <= n_page):
+
+        if (bp > 0):
+            user_agent = rand_agent()
+            headers = {'User-Agent': user_agent}
+            print colored("\n\n [+] User-Agent: "+user_agent, 'green')
+            nurl = "https://s10-eu4.startpage.com/do/search?cmd=process_search&language=english&prf=21334709fc6a498bfad2ed75d1597501&suggestOn=1&rcount=&rl=NONE&abp=1&t=night&query="+dork+"&cat=web&engine0=v1all&startat=0&nj=0"
+            print colored(" [*] Search SPGKey ...", 'cyan')
+            r = requests.get(nurl)
+            data = r.text.encode('utf-8')
+
+            if (data.find("qid=") > -1):
+                ca = (data.find("qid="))
+                cb = ca
+                while (cb < (len(data)-1) and data[cb] != '&'):
+                    cb += 1
+                SPGKey = block_cutter(data, ca+4, cb-1)
+                print colored(" [!] SPGKey: "+SPGKey, 'green')
+                
+            else:
+                print colored(" [*] ERROR SPGKey !", 'red')
+                exit(0)
+
+        while (i <= n_page-1):
 
             g_page = str(i*10)
-            
+
             user_agent = rand_agent()
             headers = {'User-Agent': user_agent}
 
             print colored("\n\n [+] User-Agent: "+user_agent, 'green')
 
             if (bp > 0):
-
-                domain = rand_domain()
-                print colored(" [+] Domain: "+domain, 'green')
-
-                Client = rand_client()
-                print colored(" [+] Client: "+Client, 'green')
-
-                GS_L = rand_gsl()
-                print colored(" [+] GS_L: "+GS_L+"\n\n", 'green')
                 
-                time.sleep(randint(5, 10))
-                nurl = "http://www.google."+domain+"/search?q="+dork+"&start="+g_page+"&"+Client+"&"+GS_L
+                time.sleep(randint(1, 3))
+                nurl = "https://s10-eu4.startpage.com/do/search?cmd=process_search&language=english&prf=21334709fc6a498bfad2ed75d1597501&suggestOn=1&qid="+SPGKey+"&rcount=&rl=NONE&abp=1&t=night&query="+dork+"&cat=web&engine0=v1all&startat="+g_page+"&nj=0"
             
             else:
-                time.sleep(randint(2, 5))
+                time.sleep(randint(1, 3))
                 if (cdom != ''):
                     print colored(" [+] Domain: "+cdom, 'green')
-                    nurl = "http://www.google."+cdom+"/search?q="+dork+"&start="+g_page
+                    nurl = "https://www.google."+cdom+"/search?q="+dork+"&start="+g_page+"&num=10&filter=0"
                 else:
-                    nurl = "http://www.google.com/search?q="+dork+"&start="+g_page
+                    nurl = "https://www.google.com/search?q="+dork+"&start="+g_page+"&num=10&filter=0"
             
             greq = requests.get(nurl, headers=headers)
             gdata = greq.text.encode('utf-8')
-
-            urls_found += myParserGSE (gdata)
+            
+            urls_found += myParserGSE (gdata, bp)
     
             i += 1
 
+        
+        urls_found = list(set(urls_found))
+    
         print colored("\n [*] GSE Crawling finished, Marvin Ppa > \n", 'cyan')
         nbr = moulinette (urls_found, out_file)
         print colored("\n [!] URLs Saved: "+str(nbr)+" in '"+out_file+"' !", 'green')

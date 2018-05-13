@@ -6,7 +6,7 @@ import sys
 import requests
 from random import randint
 from termcolor import colored
-from XGDlib import search_engine, bypass_GST, dump_page
+from XGDlib import search_engine, dump_page
 from XGDumper import MOCA
 
 
@@ -42,7 +42,7 @@ while (iargs < argc):
         print (" -p 'page_number'  :add pages number")
         print (" -p 'range(n1,n2)' OR 'n1,n2'  :add pages number with range")
         print (" -o 'out_file'  :save result")
-        print (" -b '[1-4]'  :active bypass mode, rand(domain) actived\n")
+        print (" -b '1'  :active bypass mode\n")
 
         print (" [XGDump - Module]")
         print (" --xgdump [OR] -xgdump 'your_url_target' 'param_inject' 'mode' 'table' 'field1,field2..etc'   :try inject and dump infos \n")
@@ -90,12 +90,12 @@ if ((data_dork != '' and data_page > 0 and data_file != '') or dump_module == 1)
         print colored(" --- ViraX Google Dork Scanner --- ", 'cyan')
         print colored("Original code by ViraX")
 
-        print colored("Version: b0.6.0 for Python 2.7")
+        print colored("Version: b0.7.2 for Python 2.7")
         print colored("Contributor(s)")
         print colored("- ")
         print ("\n")
 
-        print colored(" [!] DISCLAIMER: This program makes it easy to find vulnerable SQL injection URLs, it's a very simple program (naive), it will be improved ... I am not responsible for illegal acts that you would do with this program !, only educational . [!] \n", 'green')
+        print colored(" [!] DISCLAIMER: This program makes it easy to find vulnerable SQL injection URLs, it's a very simple program (naive), I am not responsible for illegal acts that you would do with this program !, only educational . [!] \n", 'green')
         print ("it will be improved, wait ...")
 
         print colored("\n [!] XGDork Start ... [!] \n", 'blue')
@@ -104,7 +104,7 @@ if ((data_dork != '' and data_page > 0 and data_file != '') or dump_module == 1)
 
         if (dump_module == 1):
             fields_list = data_fields.split(',')
-            print colored("Warning: XGdump_module is only based on the simple attack for MySQL> = 5 (Generic+SimpleBypassWAF)... it's a naive module ...\n", 'red')
+            print colored("Warning: XGDump_module is only based on the simple attack for MySQL> = 5 (Generic)... it's a naive module ...\n", 'red')
             print colored(" [*] URL: "+data_url, 'cyan')
             print colored(" [*] Param: "+data_param, 'cyan')
             print colored(" [*] Mode: "+str(data_mod)+"\n", 'cyan')
@@ -117,11 +117,9 @@ if ((data_dork != '' and data_page > 0 and data_file != '') or dump_module == 1)
             nfile.close()
 
             if (data_bypass > 0):
-                print colored(" [*] Warning: Bypass mode is active, the search will be much less precise, the search time increase, max number of pages reduced to 5, may have altered your search !", 'red')
+                print colored(" [*] Warning: Bypass mode is active...", 'red')
                 print colored(" [!] it may not work ! ", 'red')
-
                 print colored(" [!] TimeLoop += \n", 'red')
-                data_dork = bypass_GST (data_dork, data_bypass)
 
             search_engine (data_dork, data_page, data_file, data_bypass, data_cdom)
             exit(1)

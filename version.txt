@@ -1,7 +1,7 @@
 
  --- XGDork ---
 
- version : b0.6.0
+ version : b0.7.2
  beta-open
 
  --- ------ ---
@@ -9,10 +9,17 @@
 
  --- UPDATES ---
 
+[b0.7.2] - (MetaTuring)
+  - SearchEngine greatly enhanced
+  - New Google Secure 'Unusual Traffic' Bypass, efficient and stable
+  - Parsers improve
+  - some corrections
+  - removal of 'Spoof-dorks', obselete and become useless
+
 [b0.6.0]
   - Parsers improve
-  - Fix range () option in bypass mode
-  - Addition of the 'Dumper' module, 'naif', MySQL >= 5 Generic.
+  - Fix range() option in bypass mode
+  - Add the 'Dumper' module, 'naif', MySQL >= 5 Generic.
 
 [b0.5.0 (dev)]
    - Dumper rewrite
