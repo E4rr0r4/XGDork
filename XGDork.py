@@ -3,6 +3,7 @@
 
 import os
 import sys
+import time
 import requests
 from random import randint
 from termcolor import colored
@@ -19,6 +20,8 @@ data_page = -1
 data_file = ""
 data_bypass = -1
 data_cdom = ""
+data_forcing = ""
+data_timeout = -1
 
 data_url = ""
 data_param = ""
@@ -30,27 +33,54 @@ fields_list = []
 while (iargs < argc):
 
     if (argc < 2):
-        print ("Params Error, please use XGDork.py --help ! \n")
+        print colored("Params Error, please use XGDork.py --help ! \n", 'red')
         exit()
 
     if ((sys.argv[iargs] == '-h' or sys.argv[iargs] == '--help') and argc == 2):
-        print ("\n USE : XGDork.py -d 'your_dork' -p 'page_number' -o 'out_file' \n")
 
-        print (" [XGDork - Program]")
-        print (" -d 'your_dork'  :add your dork")
-        print (" -cd 'your_custom_domain'  :add custom domain (e,g .com)")
-        print (" -p 'page_number'  :add pages number")
-        print (" -p 'range(n1,n2)' OR 'n1,n2'  :add pages number with range")
-        print (" -o 'out_file'  :save result")
-        print (" -b '1'  :active bypass mode\n")
+        print colored("\n [XGDork]", 'green')
+        print (" USE : XGDork.py -d 'your_dork' -p 'page_number' -o 'out_file' \n")
 
-        print (" [XGDump - Module]")
-        print (" --xgdump [OR] -xgdump 'your_url_target' 'param_inject' 'mode' 'table' 'field1,field2..etc'   :try inject and dump infos \n")
+        print ("  -d or --dork 'your_dork'    :add your dork, for search")
+        print ("   e,g: -d .php?id= \n")
+
+        print ("  -cd or --cdomain 'your_custom_domain'    :add custom google domain")
+        print ("   e,g: -cd .com \n")
+
+        print ("  -p or --page 'page_number'    :add pages max number")
+        print ("   e,g: -p 10 \n")
+
+        print ("  -p or --page 'range(n1,n2)' or 'n1,n2'    :add pages number with range")
+        print ("   e,g: -p range(2,6) or 2,6 \n")
+
+        print ("  -o or --outfile 'out_file'    :save result")
+        print ("   e,g: -o urls_sqli.txt \n")
+
+        print ("  -b or --bypass '1'    :active bypass mode")
+        print ("   e,g: -b 1 \n")
+
+        print ("  -f or --forcing 'param_i'    :stress url test, detect simple WAF and force error")
+        print ("   e,g: -f id= \n")
+
+        print ("  -t or --timeout  n    :add timeout for requests/SQLparser")
+        print ("   e,g: -t 5 \n\n")
+
+        print colored(" [XGDump - Mod]", 'green')
+        print (" USE : XGDork.py  --xgdump 'your_url_target' 'param_inject' 'mode' 'table' 'field1,field2..etc'   :try inject and dump infos \n")
     
-        print (" --xgdump 'url' 'param_i' '1'   :try dump database_name")
-        print (" --xgdump 'url' 'param_i' '2'   :try dump_tables")
-        print (" --xgdump 'url' 'param_i' '3' 'table'   :try dump columns")
-        print (" --xgdump 'url' 'param_i' '4' 'table' 'fields'   :try dump fields_data")
+        print ("  --xgdump 'url' 'param_i' '1'    :try dump database_name_version")
+        print ("   e,g: -xgdump 'www.testwebsite.com/data/item.php?id=1984' id= 1 \n")
+
+        print ("  --xgdump 'url' 'param_i' '2'    :try dump_tables")
+        print ("   e,g: -xgdump 'www.testwebsite.com/data/item.php?id=1984' id= 2 \n")
+
+        print ("  --xgdump 'url' 'param_i' '3' 'table'    :try dump columns")
+        print ("   e,g: -xgdump 'www.testwebsite.com/data/item.php?id=1984 id= 3 tbl_admin' \n")
+
+        print ("  --xgdump 'url' 'param_i' '4' 'table' 'fields'    :try dump fields_data")
+        print ("   e,g: -xgdump 'www.testwebsite.com/data/item.php?id=1984' id= 4 tbl_admin admin_id,admin_login,admin_password \n")
+
+        print ('\n')
         exit()
 
     if (sys.argv[iargs] == '-xgdump' or sys.argv[iargs] == '--xgdump'):
@@ -64,16 +94,20 @@ while (iargs < argc):
         dump_module = 1
 
 
-    if (sys.argv[iargs] == '-d'):
+    if (sys.argv[iargs] == '-d' or sys.argv[iargs] == "--dork"):
         data_dork = sys.argv[iargs+1]
-    if (sys.argv[iargs] == '-p'):
+    if (sys.argv[iargs] == '-p' or sys.argv[iargs] == "--page"):
         data_page = sys.argv[iargs+1]
-    if (sys.argv[iargs] == '-cd'):
+    if (sys.argv[iargs] == '-cd' or sys.argv[iargs] == "--cdomain"):
         data_cdom = sys.argv[iargs+1]
-    if (sys.argv[iargs] == '-o'):
+    if (sys.argv[iargs] == '-o' or sys.argv[iargs] == "--outfile"):
         data_file = sys.argv[iargs+1]
-    if (sys.argv[iargs] == '-b'):
+    if (sys.argv[iargs] == '-b' or sys.argv[iargs] == "--bypass"):
         data_bypass = int(sys.argv[iargs+1])
+    if (sys.argv[iargs] == '-f' or sys.argv[iargs] == "--forcing"):
+        data_forcing = sys.argv[iargs+1]
+    if (sys.argv[iargs] == '-t' or sys.argv[iargs] == '--timeout'):
+        data_timeout = int(sys.argv[iargs+1])
 
 
     iargs += 1
@@ -81,47 +115,61 @@ while (iargs < argc):
 
 if ((data_dork != '' and data_page > 0 and data_file != '') or dump_module == 1):
 
-        print ("\n\n")
+        print        ("\n\n")
         print colored("  __  ______ ____    42       _     ", 'blue')
         print colored("  \ \/ / ___|  _ \  ___  _ __| | __ ", 'blue')
         print colored("   \  / |  _| | | |/ _ \| '__| |/ / ", 'blue')
         print colored("   /  \ |_| | |_| | (_) | |  |   <  ", 'blue')
         print colored("  /_/\_\____|____/ \___/|_|  |_|\_\ \n", 'blue')
-        print colored(" --- ViraX Google Dork Scanner --- ", 'cyan')
-        print colored("Original code by ViraX")
+        print colored("  --- ViraX Google Dork Scanner --- \n", 'cyan')
 
-        print colored("Version: b0.7.2 for Python 2.7")
-        print colored("Contributor(s)")
-        print colored("- ")
-        print ("\n")
+        print        ("Original code by ViraX")
+        print        ("Version: b0.9.0 for Python 2.7")
+        print        ("Compatible for Android (NoRoot) - Termux \n")
 
-        print colored(" [!] DISCLAIMER: This program makes it easy to find vulnerable SQL injection URLs, it's a very simple program (naive), I am not responsible for illegal acts that you would do with this program !, only educational . [!] \n", 'green')
-        print ("it will be improved, wait ...")
+        print colored("Contributor(s)/Source(s)", 'cyan')
+        print        ("- SQLmap ('agents file') - https://github.com/sqlmapproject/ ")
+        print        ("- ")
+        print        ("\n")
 
-        print colored("\n [!] XGDork Start ... [!] \n", 'blue')
+        print colored(" [!] DISCLAIMER: A simple 'naive' tool to find SQLi Vulnerable websites in the wild via Google, I am not responsible for illegal acts that you would do with this program !, only educational . [!] \n", 'green')
+
+        print        (" [*] it will be improved, wait ...")
+
+        print colored("\n [!] XGDork Start ["+str(time.ctime())+"] ... [!] \n", 'blue')
         
 
 
         if (dump_module == 1):
             fields_list = data_fields.split(',')
-            print colored("Warning: XGDump_module is only based on the simple attack for MySQL> = 5 (Generic)... it's a naive module ...\n", 'red')
+            print colored("Warning: XGDump is only based on the simple attack for MySQL >= 5 (Generic)... it's a naive module ...\n", 'red')
+
             print colored(" [*] URL: "+data_url, 'cyan')
             print colored(" [*] Param: "+data_param, 'cyan')
-            print colored(" [*] Mode: "+str(data_mod)+"\n", 'cyan')
+            if (int(data_mod) < 3):
+                print colored(" [*] Mode: "+str(data_mod)+"\n", 'cyan')
+            elif (int(data_mod) == 3):
+                print colored(" [*] Mode: "+str(data_mod)+" Table: "+data_table+"\n", 'cyan')
+            elif (int(data_mod) == 4):
+                print colored(" [*] Mode: "+str(data_mod)+" Table: "+data_table+" Fields: "+str(fields_list).replace(']', '').replace('[', '')+"\n", 'cyan')
+
             MOCA(data_url, data_param, int(data_mod), data_table, fields_list)
+            print colored("\n [!] ["+str(time.ctime())+"] ... XGDork End [!] \n", 'blue')
             exit(0)
         else:
-
+            
+            data_file = str(data_file).replace('\n', '').replace(' ', '')
             nfile = open(data_file, 'w')
-            nfile.write("--- XGDork Result --- \n")
+            nfile.write("--- XGDork Result [ "+data_dork+" ] --- \n")
             nfile.close()
 
             if (data_bypass > 0):
                 print colored(" [*] Warning: Bypass mode is active...", 'red')
                 print colored(" [!] it may not work ! ", 'red')
-                print colored(" [!] TimeLoop += \n", 'red')
-
-            search_engine (data_dork, data_page, data_file, data_bypass, data_cdom)
+                
+            print colored(" [*] let's try with [ "+data_dork+" ] Happy hunting ! ;) ", 'cyan')
+            search_engine (data_dork, data_page, data_file, data_bypass, data_cdom, data_forcing, data_timeout)
+            print colored("\n [!] ["+str(time.ctime())+"] ... XGDork End [!] \n", 'blue')
             exit(1)
 
 else:

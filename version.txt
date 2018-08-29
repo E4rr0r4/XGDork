@@ -1,13 +1,26 @@
 
  --- XGDork ---
 
- version : b0.7.2
+ version : b0.9.0
  beta-open
 
  --- ------ ---
 
+ 'agents.txt' file made by SQLmap Dev/team
+ SQLmap - https://github.com/sqlmapproject/
+
+
 
  --- UPDATES ---
+
+[b0.9.0]
+  - Add of various information
+  - Aestheticism of the program
+  - Some corrections, minor modifications
+  - Add 'forcing' option, additional tests, simple WAF detection ...
+  - Add 'timeout' option, allows to define a timeout for Requests when reading the received data
+  - If your list is not empty before detecting 'Unusual Traffic', then the program will go on to the next step
+
 
 [b0.7.2] - (MetaTuring)
   - SearchEngine greatly enhanced
@@ -34,12 +47,12 @@
   - SearchEngine enhancement> 'customdomain' option allows you to manually define a Google domain, by default: '. Com'
   - SearchEngine enhancement> option 'range ()' sets the start and end of search
   - Various Improvement / Modification ...
-  - Optimization of the code in general ...
+  - Optimization general ...
 
 [a.1.0.3]
-  - Supports Rewritten Arguments (flexible, easy to add new module or options ...)
+  - Supports Arguments rewritten (flexible, easy to add new module or options ...)
   - Add Bypass mode (simple)
-  - Code slightly optimize
+  - Code optimized
 
 [a.0.8.0 (dev)]
   - Add Bypass mode (primitive)
@@ -49,9 +62,9 @@
   - Improved URLs filter
 
 [a0.7.5]
-  - First version share
+  - First version shared
   - Rewriting code
-  - Improvement at all
+  - Improvement all
 
 [Prototype (dev)]
   - basic functions, primitive ...
