@@ -22,4 +22,4 @@ A simple 'naive' python tool to find SQLi Vulnerable websites in the wild via Go
 version: b0.9.0
 
 - Contributor(s)/Source(s)
-  SQLmap 'agents file' - https://github.com/sqlmapproject/
+  * SQLmap 'agents file' - https://github.com/sqlmapproject/
