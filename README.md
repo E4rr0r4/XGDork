@@ -6,7 +6,9 @@ SQLi Google Dork Scanner by ViraX @ 2018
 A simple 'naive' python tool to find SQLi Vulnerable websites in the wild via Google.
 
 [!] DISCLAIMER: I am not responsible for illegal acts that you would do with this program !, only educational . [!]
-
+  - SQL Dork Scanner
+  - SQL Dumper module (basic)
+  - Simple Tools
 
 --- Setup ---
 - install Python 2.7 / on Termux 'pkg install python2'
@@ -19,7 +21,7 @@ A simple 'naive' python tool to find SQLi Vulnerable websites in the wild via Go
 - python/python2 XGDork.py --help
 
 
-version: b0.9.0
+version: Final-1.0-FreeSoftware
 
 - Contributor(s)/Source(s)
   * SQLmap 'agents file' - https://github.com/sqlmapproject/
