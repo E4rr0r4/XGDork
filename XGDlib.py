@@ -632,9 +632,9 @@ def     marvin_ppa (url, out_file, forcing, timeout, inject, mores):
                     break
                 i += 1
             c = i-1
-            if (url.find("http") > -1):
+            if (url.find("http://") > -1):
                 surl = block_cutter(url, 7, c)
-            elif (url.find("https") > -1):
+            elif (url.find("https://") > -1):
                 surl = block_cutter(url, 8, c)
             tsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             tsock.connect((surl, port))
