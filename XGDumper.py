@@ -1,5 +1,8 @@
 
 
+# This program is a 'total' free software: you can redistribute it and/or modify - ViraX
+# You can quoted me as a source.
+
 
 import requests
 from termcolor import colored
