@@ -145,20 +145,20 @@ def     myParserGSE (greq, bp):
 
         while (i < len(greq)-1):
                 
-            if (greq[i] == 'h'):
+            if (greq[i] == 'h' and bp == -1 or (bp > 0 and greq[i] == 'h' and greq[i+1] == 'r')):
                 ca = i
                 while (i < len(greq)-1 and greq[i] != ':'):
                     i += 1
                 cb = i
                 tmp = block_cutter (greq, ca, cb)
             
-                if (tmp == 'http:' or tmp == 'https:' or (tmp == "h3 class='clk'><a href='http:" and bp > 0) or (tmp == "h3 class='clk'><a href='https:" and bp > 0) or (tmp == "href='http:" and bp > 0) or (tmp == "href='https:" and bp > 0)):
+                if (tmp == 'http:' or tmp == 'https:' or (bp > 0 and tmp == "href=\"http:") or (bp > 0 and tmp == "href=\"https:")):
 
                     while (i < len(greq)-1 and greq[i] != ' '):
                         i += 1
                     cb = i
                     if (bp > 0):
-                        url_found = block_cutter (greq, (ca+len("h3 class='clk'><a href='")), cb-2)
+                        url_found = block_cutter (greq, (ca+len("href=\"")), cb-2)
                     else:
                         url_found = block_cutter (greq, ca, cb)
                     
@@ -211,7 +211,7 @@ def     myParserGSE (greq, bp):
 
 
                     if (url_found.find('.google.') == -1 and url_found.find('.gstatic.') == -1 and url_found.find('injection-sql') == -1 and url_found.find('sql-injection') == -1 and url_found.find('sql-injections') == -1 and url_found.find('sql-dorks') == -1 and url_found.find('dorks') == -1 and url_found.find('hack') == -1 and url_found.find('scribd') == -1 and url_found.find('pastebin') == -1 and url_found.find('stackoverflow') == -1 and url_found.find('over-blog') == -1 and url_found.find('github') == -1 and url_found.find('blogspot') == -1 and url_found.find('facebook') == -1 and url_found.find('moodle.') == -1 and url_found.find('openclassroom') == -1 and url_found.find('cracking.org') == -1 and url_found.find('websec.ca') == -1 and url_found.find('sql_injection') == -1 and url_found.find('injection_sql') == -1 and url_found.find('carding_dork') == -1 and url_found.find('carding-dork') == -1 and url_found.find('hacking') == -1 and url_found.find('vulnerability-lab.com') == -1):
-                        if ((url_found.find('http:') > -1 or url_found.find('https:') > -1) and url_found.find('=') > -1 and url_found.find('?') > -1 and url_found.find('ixquick-proxy.com') == -1 and url_found.find('forum.phpdebutant') == -1 and url_found.find('youtube.com') == -1):
+                        if ((url_found.find('http:') > -1 or url_found.find('https:') > -1) and url_found.find('=') > -1 and url_found.find('?') > -1 and url_found.find('ixquick-proxy.com') == -1 and url_found.find('forum.phpdebutant') == -1 and url_found.find('youtube.com') == -1 and url_found.find('startpage') == -1):
                             urls.append(url_found)
                             print (" [!] URL Found: "+url_found)
                     #else:
@@ -731,12 +731,12 @@ def     search_engine (dork, n_page, out_file, bp, cdom, forcing, timeout, injec
             r = requests.get(nurl, headers=headers)
             data = r.text.encode('utf-8')
 
-            if (data.find("qid=") > -1):
-                ca = (data.find("qid="))
+            if (data.find("\"qid\":") > -1):
+                ca = (data.find("\"qid\":"))
                 cb = ca
-                while (cb < (len(data)-1) and data[cb] != '&'):
+                while (cb < (len(data)-1) and data[cb] != ','):
                     cb += 1
-                SPGKey = block_cutter(data, ca+4, cb-1)
+                SPGKey = block_cutter(data, ca+7, cb-2)
                 print colored(" [!] SPGKey: "+SPGKey, 'green')
                 
             else:
