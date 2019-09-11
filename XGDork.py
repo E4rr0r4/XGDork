@@ -173,7 +173,7 @@ if ((data_dork != '' and data_page > 0 and data_file != '') or dump_module == 1)
         print colored("  --- ViraX Google Dork Scanner --- \n", 'cyan')
 
         print        ("  Original code by ViraX")
-        print        ("  Version: final-1.0k FreeSoftware for Python 2.7")
+        print        ("  Version: final-1.0k2 FreeSoftware for Python 2.7")
         print        ("  Compatible Mobile - Android (NoRoot) - Termux \n")
 
         print colored("  Contributor(s)/Source(s)", 'cyan')

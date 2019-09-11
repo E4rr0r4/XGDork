@@ -1,7 +1,7 @@
 
  --- XGDork ---
 
- version : final-1.0k FreeSoftware
+ version : final-1.0k2 FreeSoftware
  Final-open
 
  --- ------ ---
@@ -13,8 +13,13 @@
 
  --- UPDATES ---
 
+	(Update coming soon...)
+
+[final-1.0k2]
+  - Fix SPGKey Error for Bypass mode
+
 [final-1.0k]
-  - Fix SPGKey Error for Bypass mod
+  - Fix SPGKey Error for Bypass mode
 
 [final-1.0]
   - Some corrections

@@ -721,27 +721,27 @@ def     search_engine (dork, n_page, out_file, bp, cdom, forcing, timeout, injec
 
         print colored(" [*] GSE Crawling wait ...", 'cyan')
 
-        if (bp > 0):
-            user_agent = rand_agent()
-            headers = {'User-Agent': user_agent}
+        #if (bp > 0):
+            #user_agent = rand_agent()
+            #headers = {'User-Agent': user_agent}
 
-            print colored("\n [+] User-Agent: "+user_agent, 'green')
-            nurl = "https://s10-eu4.startpage.com/do/search?cmd=process_search&language=english&prf=21334709fc6a498bfad2ed75d1597501&suggestOn=1&rcount=&rl=NONE&abp=1&t=night&query="+dork+"&cat=web&engine0=v1all&startat=0&nj=0"
-            print colored(" [*] Search SPGKey ...", 'cyan')
-            r = requests.get(nurl, headers=headers)
-            data = r.text.encode('utf-8')
+            #print colored("\n [+] User-Agent: "+user_agent, 'green')
+            #nurl = "https://s10-eu4.startpage.com/do/search?cmd=process_search&language=english&prf=21334709fc6a498bfad2ed75d1597501&suggestOn=1&rcount=&rl=NONE&abp=1&t=night&query="+dork+"&cat=web&engine0=v1all&startat=0&nj=0"
+            #print colored(" [*] Search SPGKey ...", 'cyan')
+            #r = requests.get(nurl, headers=headers)
+            #data = r.text.encode('utf-8')
 
-            if (data.find("\"qid\":") > -1):
-                ca = (data.find("\"qid\":"))
-                cb = ca
-                while (cb < (len(data)-1) and data[cb] != ','):
-                    cb += 1
-                SPGKey = block_cutter(data, ca+7, cb-2)
-                print colored(" [!] SPGKey: "+SPGKey, 'green')
+            #if (data.find("\"qid\":") > -1):
+                #ca = (data.find("\"qid\":"))
+                #cb = ca
+                #while (cb < (len(data)-1) and data[cb] != ','):
+                    #cb += 1
+                #SPGKey = block_cutter(data, ca+7, cb-2)
+                #print colored(" [!] SPGKey: "+SPGKey, 'green')
                 
-            else:
-                print colored(" [*] ERROR SPGKey !", 'red')
-                exit(0)
+            #else:
+                #print colored(" [*] ERROR SPGKey !", 'red')
+                #exit(0)
 
         while (i <= n_page-1 and breaker == 0):
             if (breaker == 1):
@@ -758,7 +758,8 @@ def     search_engine (dork, n_page, out_file, bp, cdom, forcing, timeout, injec
             if (bp > 0):
                 
                 time.sleep(randint(1, 3))
-                nurl = "https://s10-eu4.startpage.com/do/search?cmd=process_search&language=english&prf=21334709fc6a498bfad2ed75d1597501&suggestOn=1&qid="+SPGKey+"&rcount=&rl=NONE&abp=1&t=night&query="+dork+"&cat=web&engine0=v1all&startat="+g_page+"&nj=0"
+                nurl = "https://s10-eu4.startpage.com/do/search?cmd=process_search&language=english&prf=21334709fc6a498bfad2ed75d1597501&suggestOn=1&qid=&rcount=&rl=NONE&abp=1&t=night&query="+dork+"&cat=web&engine0=v1all&startat="+g_page+"&nj=0"
+                #"https://s10-eu4.startpage.com/do/search?cmd=process_search&language=english&prf=21334709fc6a498bfad2ed75d1597501&suggestOn=1&qid="+SPGKey+"&rcount=&rl=NONE&abp=1&t=night&query="+dork+"&cat=web&engine0=v1all&startat="+g_page+"&nj=0"
             
             else:
                 time.sleep(randint(1, 3))

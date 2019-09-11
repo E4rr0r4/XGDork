@@ -21,7 +21,7 @@ A simple 'naive' python tool to find SQLi Vulnerable websites in the wild via Go
 - python/python2 XGDork.py --help
 
 
-version: Final-1.0k-FreeSoftware
+version: Final-1.0k2-FreeSoftware
 
 - Contributor(s)/Source(s)
   * SQLmap 'agents file' - https://github.com/sqlmapproject/
