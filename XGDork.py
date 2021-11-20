@@ -41,12 +41,12 @@ fields_list = []
 while (iargs < argc):
 
     if (argc < 2):
-        print colored("Params Error, please use XGDork.py --help ! \n", 'red')
+        print("Params Error, please use XGDork.py --help ! \n", 'red')
         exit()
 
     if ((sys.argv[iargs] == '-h' or sys.argv[iargs] == '--help') and argc == 2):
 
-        print colored("\n [XGDork - Scanner]", 'green')
+        print("\n [XGDork - Scanner]")
         print (" USE : XGDork.py -d 'your_dork' -p 'page_number' -o 'out_file' \n")
 
         print ("  -d or --dork 'your_dork'    :add your dork, for search")
@@ -87,7 +87,7 @@ while (iargs < argc):
         print ("   e,g: -ex '123' \n")
 
 
-        print colored(" [XGDump - Dumper Mod]", 'green')
+        print(" [XGDump - Dumper Mod]")
         print (" USE : XGDork.py  --xgdump 'your_url_target' 'param_inject' 'mode' 'table' 'field1,field2..etc'   :try inject and dump infos \n")
     
         print ("  --xgdump 'url' 'param_i' '1'    :try dump database_name_version")
@@ -103,7 +103,7 @@ while (iargs < argc):
         print ("   e,g: -xgdump 'www.testwebsite.com/data/item.php?id=1984' id= 4 tbl_admin admin_id,admin_login,admin_password \n")
 
 
-        print colored(" [XGDtoolz - simple Tools]", 'green')
+        print (" [XGDtoolz - simple Tools]")
         print (" USE : XGDtoolz.py --TOOL --ARGS    :simple tools integrate with XGDork \n")
         
         print ("  -gd or --gendork    :allow to generate a dork")
@@ -120,7 +120,7 @@ while (iargs < argc):
         print ("   e,g: XGDtoolz.py -dx -s '###=0SLO...YkD...2DMi...0SL@@@' -k 'abc'")
         print ("   e,g: XGDtoolz.py -dx -fs myfile.txt -k 'abc' \n")
 
-        print ('\n')
+        print ("")
         exit()
 
 
@@ -165,44 +165,44 @@ while (iargs < argc):
 if ((data_dork != '' and data_page > 0 and data_file != '') or dump_module == 1):
 
         print        ("\n\n")
-        print colored("  __  ______ ____    42       _     ", 'blue')
-        print colored("  \ \/ / ___|  _ \  ___  _ __| | __ ", 'blue')
-        print colored("   \  / |  _| | | |/ _ \| '__| |/ / ", 'blue')
-        print colored("   /  \ |_| | |_| | (_) | |  |   <  ", 'blue')
-        print colored("  /_/\_\____|____/ \___/|_|  |_|\_\ \n", 'blue')
-        print colored("  --- ViraX Google Dork Scanner --- \n", 'cyan')
+        print ("  __  ______ ____    42       _     ")
+        print ("  \ \/ / ___|  _ \  ___  _ __| | __ ")
+        print ("   \  / |  _| | | |/ _ \| '__| |/ / ")
+        print ("   /  \ |_| | |_| | (_) | |  |   <  ")
+        print ("  /_/\_\____|____/ \___/|_|  |_|\_\ \n")
+        print ("  --- ViraX Google Dork Scanner --- \n")
 
         print        ("  Original code by ViraX")
         print        ("  Version: final-1.0k2 FreeSoftware for Python 2.7")
         print        ("  Compatible Mobile - Android (NoRoot) - Termux \n")
 
-        print colored("  Contributor(s)/Source(s)", 'cyan')
+        print ("  Contributor(s)/Source(s)")
         print        ("  - SQLmap ('agents file') - https://github.com/sqlmapproject/ ")
         print        ("  - ")
         print        ("\n")
 
-        print colored(" [!] DISCLAIMER: A simple 'naive' tool to find SQLi Vulnerable websites in the wild via Google.", 'green')
-        print colored(" I am not responsible for illegal acts that you would do with this program !, only educational . [!] \n", 'green')
+        print (" [!] DISCLAIMER: A simple 'naive' tool to find SQLi Vulnerable websites in the wild via Google.")
+        print (" I am not responsible for illegal acts that you would do with this program !, only educational . [!] \n")
 
 
-        print colored("\n [!] XGDork Start ["+str(time.ctime())+"] ... [!] \n", 'blue')
+        print ("\n [!] XGDork Start ["+str(time.ctime())+"] ... [!] \n")
         
 
         if (dump_module == 1):
             fields_list = data_fields.split(',')
-            print colored(" [*] Warning: XGDump is only based on the simple attack(s) for MySQL >= 5 (Generic)... it's a naive module ...\n", 'red')
+            print (" [*] Warning: XGDump is only based on the simple attack(s) for MySQL >= 5 (Generic)... it's a naive module ...\n")
 
-            print colored(" [*] URL: "+data_url, 'cyan')
-            print colored(" [*] Param: "+data_param, 'cyan')
+            print (" [*] URL: "+data_url)
+            print (" [*] Param: "+data_param)
             if (int(data_mod) < 3):
-                print colored(" [*] Mode: "+str(data_mod)+"\n", 'cyan')
+                print (" [*] Mode: "+str(data_mod)+"\n")
             elif (int(data_mod) == 3):
-                print colored(" [*] Mode: "+str(data_mod)+" Table: "+data_table+"\n", 'cyan')
+                print (" [*] Mode: "+str(data_mod)+" Table: "+data_table+"\n")
             elif (int(data_mod) == 4):
-                print colored(" [*] Mode: "+str(data_mod)+" Table: "+data_table+" Fields: "+str(fields_list).replace(']', '').replace('[', '')+"\n", 'cyan')
+                print (" [*] Mode: "+str(data_mod)+" Table: "+data_table+" Fields: "+str(fields_list).replace(']', '').replace('[', '')+"\n")
 
             MOCA(data_url, data_param, int(data_mod), data_table, fields_list)
-            print colored("\n [!] ["+str(time.ctime())+"] ... XGDork End [!] \n", 'blue')
+            print ("\n [!] ["+str(time.ctime())+"] ... XGDork End [!] \n")
             exit(0)
         else:
             
@@ -212,14 +212,14 @@ if ((data_dork != '' and data_page > 0 and data_file != '') or dump_module == 1)
             nfile.close()
 
             if (data_bypass > 0):
-                print colored(" [*] Warning: Bypass mode is active, it may not work...", 'red')
+                print (" [*] Warning: Bypass mode is active, it may not work...")
                 
-            print colored(" [*] let's try with [ "+data_dork+" ] Happy hunting ! ;) ", 'cyan')
+            print (" [*] let's try with [ "+data_dork+" ] Happy hunting ! ;) ")
             search_engine (data_dork, data_page, data_file, data_bypass, data_cdom, data_forcing, data_timeout, data_inject, data_mores)
             if (data_x == 1):
                 Ex ("", data_file, data_xkey, 256)
 
-            print colored("\n [!] ["+str(time.ctime())+"] ... XGDork End [!] \n", 'blue')
+            print ("\n [!] ["+str(time.ctime())+"] ... XGDork End [!] \n")
             exit(1)
 
 else:
