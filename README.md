@@ -1,5 +1,7 @@
 # XGDork - ViraX Google Dork Scanner
 
+ **WARNING, XGDork is broken, use XGDork²** here -> https://github.com/E4rr0r4/XGDork-2
+
 SQLi Google Dork Scanner by ViraX @ 2018 - 2019
 - for Python 2.7 - compatible Android(NoRoot) - Termux
 
